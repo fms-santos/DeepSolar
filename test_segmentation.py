@@ -149,20 +149,20 @@ def test():
                     # generate CAM for that sample
                     CAM_val = sess.run(CAM, feed_dict={img_placeholder: img_batch})
                     CAM_val = rescale_CAM(CAM_val)
-                    pred_pixel_area = np.sum(CAM_val > SEGMENTATION_THRES) # predicted/estimated pixel area
+                    pred_pixel_area = np.sum(CAM_val > SEGMENTATION_THRES) # predicted or estimated pixel area
                     estimiate_total_area[region_index] += pred_pixel_area
 
                     if label == [0]: # FP
                         stats[region_type][1] += 1
                         # save original image and CAM.
                         skimage.io.imsave(os.path.join(RESULT_DIR, 'FP', str(region_index) + '_' + str(img_index) + '_original.png'), img)
-                        skimage.io.imsave(os.path.join(RESULT_DIR, 'FP', str(region_index) + '_' + str(img_index) + '_CAM.png'), img)
+                        skimage.io.imsave(os.path.join(RESULT_DIR, 'FP', str(region_index) + '_' + str(img_index) + '_CAM.png'), CAM_val)
 
                     else: # TP
                         stats[region_type][0] += 1
                         # save original image and CAM.
                         skimage.io.imsave(os.path.join(RESULT_DIR, 'TP', str(region_index) + '_' + str(img_index) + '_original.png'),img)
-                        skimage.io.imsave(os.path.join(RESULT_DIR, 'TP', str(region_index) + '_' + str(img_index) + '_CAM.png'), img)
+                        skimage.io.imsave(os.path.join(RESULT_DIR, 'TP', str(region_index) + '_' + str(img_index) + '_CAM.png'), CAM_val)
                         # compare with ground truth segmentation.
                         true_seg_img = skimage.io.imread(os.path.join(FLAGS.eval_set_dir, str(region_index), str(img_index)+'_true_seg.png'))
                         true_seg_img /= 255.0
