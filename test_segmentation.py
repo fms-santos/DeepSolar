@@ -97,7 +97,8 @@ def test():
         W_c = tf.gather(tf.transpose(W), 1)
         W_c = tf.reshape(W_c, [-1, 512, 1])
         conv_map_resized = tf.reshape(conv_map_resized, [-1, 100 * 100, 512])
-        CAM = tf.batch_matmul(conv_map_resized, W_c)
+        #CAM = tf.batch_matmul(conv_map_resized, W_c) tf.batch_matmul is deprecated in TF 1.12
+        CAM = tf.matmul(conv_map_resized, W_c)
         CAM = tf.reshape(CAM, [-1, 100, 100])
 
         # Construct saver
